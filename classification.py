@@ -343,8 +343,7 @@ class Classification():
                 
                 
                 #-- log --        
-                print('\tFinish Train: Best Macro-F1: %f , Best Epoch: %d'
-                          %(best_macro , best_epoch))     
+                print('\tFinish Train :)')     
                 print('\tSaving Results ...')       
                 
                 torch.save(best_model.state_dict(), self.model_file)

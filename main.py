@@ -49,6 +49,14 @@ def main(ds_title , amount_labeled, n_iterations, epochs):
                            labeled_percent = amount_labeled,
                            number_of_iterations=n_iterations)
     
+    for k in K_VALUES:
+            for alpha in ALPHA_VALUES: 
+                sa.Adamic_Adar_Augmentation(k=k,
+                                            alpha=alpha,
+                                            labeled_percent=amount_labeled,                                            
+                                            ds_title= ds_title)
+                
+    
     
     for iteration in range(1, n_iterations+1):
         for k in K_VALUES:
@@ -64,13 +72,7 @@ def main(ds_title , amount_labeled, n_iterations, epochs):
                                      labeled_percent=amount_labeled,
                                      iteration=iteration,
                                      ds_title= ds_title,
-                                     epoch = epochs)
-                
-                sa.Adamic_Adar_Augmentation(k=k,
-                                            alpha=alpha,
-                                            labeled_percent=amount_labeled,
-                                            iteration=iteration,
-                                            ds_title= ds_title)
+                                     epoch = epochs)              
                 
                 classification.Classification(k=k,
                                               alpha=alpha,

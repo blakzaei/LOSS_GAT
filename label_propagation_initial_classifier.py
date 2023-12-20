@@ -215,8 +215,7 @@ class LP_Classifier():
 
 
         #-- log --        
-        print('\tFinish Train: Best Macro-F1: %f , Best Epoch: %d'
-              %(best_macro , best_epoch))     
+        print('\tFinish Train :)')     
         print('\tSaving Results ...')        
         
         torch.save(predictions, self.predicted_labels_file)   
@@ -226,8 +225,8 @@ class LP_Classifier():
         predicted_fake = torch.nonzero(best_labels == 1).squeeze()
         predicted_real = torch.nonzero(best_labels == 0).squeeze()
 
-        print('predicted_fake:' , predicted_fake.shape)
-        print('predicted_real:' , predicted_real.shape)
+        #print('predicted_fake:' , predicted_fake.shape)
+        #print('predicted_real:' , predicted_real.shape)
 
         
 

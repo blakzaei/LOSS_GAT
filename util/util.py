@@ -20,7 +20,11 @@ def create_folder(name=""):
 
 
 #-- Create an Empty Dataframe for best results ----------------------------
-def create_empty_df_for_results(results_file):        
+def create_empty_df_for_results(results_file):
+    if  os.path.exists(results_file):
+        return
+
+
     cols_names = ['DS_name',
                   'labeled_amount',
                   'iteration',

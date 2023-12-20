@@ -11,21 +11,20 @@ import os
 
 class Adamic_Adar_Augmentation:
     
-    def __init__(self , k , alpha, labeled_percent, iteration,
+    def __init__(self , k , alpha, labeled_percent,
                  ds_title, aa_thresholds = [float(i) / 10 for i in range(1, 7)],
-                 number_of_processes = 5,
-                 sub_pairs_length = 500): 
+                 number_of_processes = 100,
+                 sub_pairs_length = 500000):
         
         #-- log --
         print('Start Structual Augmentation ---------------------------------')
-        print('\titeration=%d - k=%d - alpha = %f' \
-                  %(iteration,k,alpha))
+        print('\tk=%d - alpha = %f' \
+                  %(k,alpha))
         
         #-- initlize params ---------------------------------------------------
         self.k = k
         self.alpha = alpha           
-        self.labeled_percent = labeled_percent
-        self.iteration = iteration
+        self.labeled_percent = labeled_percent        
         self.ds_title = ds_title     
         self.aa_thresholds = aa_thresholds
         
@@ -42,7 +41,7 @@ class Adamic_Adar_Augmentation:
         util.create_folder(self.output_path)       
                 
         
-        self.number_of_processes = number_of_processes
+        #self.number_of_processes = number_of_processes
         self.sub_pairs_length = sub_pairs_length        
               
                 
@@ -78,9 +77,10 @@ class Adamic_Adar_Augmentation:
         print('\tSetting Weight 1 for all edges:')
         nx.set_edge_attributes(self.G, 1, 'weight')
     
-        print('\tCreating All Pairs of Nodes ...')        
-        pairs = [(u, v) for u in nodes for v in nodes if not self.G.has_edge(u, v) and u!=v]
-        print('\t-paris length = %d' %len(pairs))
+        print('\tCreating All Pairs of Nodes ...')
+        pairs = []
+        pairs = [(u, v) for u in nodes for v in nodes if not self.G.has_edge(u, v) and u != v and (v, u) not in pairs]
+        print('\t-paris length = %d' % len(pairs))
     
         print('\tCalculating AA for All Pairs ..')
         counter = 1
@@ -92,8 +92,11 @@ class Adamic_Adar_Augmentation:
                 print('\t\t-subset number: ' , i , '----')
     
             sub_pairs = pairs[i:i+sub_pairs_length]
-            sub_results = starmap(self.Compute_AA_Index, sub_pairs,
-                                  pm_processes=self.number_of_processes)
+            # sub_results = starmap(self.Compute_AA_Index, sub_pairs,
+            #                       pm_processes=self.number_of_processes)
+            sub_results = []
+            for pr in sub_pairs:
+                sub_results.append(self.Compute_AA_Index(pr[0], pr[1]))
     
             max_aa = max(aa_val for u, v, aa_val in sub_results)
             if max_aa > max_aa_value:
